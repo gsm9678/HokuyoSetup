@@ -425,13 +425,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842984063}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2134217742}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -563,6 +563,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorEnum: 0
   SensorPosi: {fileID: 3336085151435847750}
+  camera: {fileID: 0}
 --- !u!1 &1089270762
 GameObject:
   m_ObjectHideFlags: 0
@@ -642,6 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorEnum: 4
   SensorPosi: {fileID: 3616296583646278681}
+  camera: {fileID: 0}
 --- !u!4 &1217305849
 Transform:
   m_ObjectHideFlags: 0
@@ -946,6 +948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorEnum: 1
   SensorPosi: {fileID: 1703922784546469681}
+  camera: {fileID: 0}
 --- !u!4 &1680520974
 Transform:
   m_ObjectHideFlags: 0
@@ -1007,6 +1010,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorEnum: 2
   SensorPosi: {fileID: 7631790944695933601}
+  camera: {fileID: 0}
 --- !u!1 &1731481612
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,6 +1057,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorEnum: 3
   SensorPosi: {fileID: 9175560347114747307}
+  camera: {fileID: 0}
 --- !u!1 &1800593219
 GameObject:
   m_ObjectHideFlags: 0
@@ -1601,13 +1606,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2847969739353652738}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1438743407829023699}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}

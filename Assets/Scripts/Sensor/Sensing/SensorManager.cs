@@ -50,8 +50,8 @@ public class SensorManager : MonoBehaviour
                 vector3.Clear();
                 MousePosition = Input.mousePosition;
 
-                vector3.Add(new Vector3(scale(camera.pixelWidth / 2, -camera.pixelWidth / 2, SensorPosi.position.x - SensorPosi.rect.width / 2, SensorPosi.position.x + SensorPosi.rect.width / 2, MousePosition.x - camera.pixelWidth / 2),
-                                            scale(camera.pixelHeight / 2, -camera.pixelHeight / 2, SensorPosi.position.y - SensorPosi.rect.height / 2, SensorPosi.position.y + SensorPosi.rect.height / 2, MousePosition.y - camera.pixelHeight / 2),
+                vector3.Add(new Vector3(scale(-camera.pixelWidth / 2, camera.pixelWidth / 2, SensorPosi.position.x - SensorPosi.rect.width / 2, SensorPosi.position.x + SensorPosi.rect.width / 2, MousePosition.x - camera.pixelWidth / 2),
+                                            scale(-camera.pixelHeight / 2, camera.pixelHeight / 2, SensorPosi.position.y - SensorPosi.rect.height / 2, SensorPosi.position.y + SensorPosi.rect.height / 2, MousePosition.y - camera.pixelHeight / 2),
                                             0));
             }
         }
