@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TouchPointGenerate : MonoBehaviour
@@ -16,7 +14,7 @@ public class TouchPointGenerate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SensorActiveState.instance.SensorState[((int)sensorEnum)])//호쿠요 메니저가 연결되었으면
+        if (SensorActiveState.Instance.SensorState[((int)sensorEnum)])//호쿠요 메니저가 연결되었으면
         {
             if(TouchPoint != null)
             {

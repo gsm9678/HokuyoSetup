@@ -15,7 +15,7 @@ public class SensorManager : MonoBehaviour
 
     void Start()
     {
-        m_senserData = OSCManager.instance;
+        m_senserData = OSCManager.Instance;
         StartCoroutine(GetSensorData());
     }
 
@@ -23,7 +23,7 @@ public class SensorManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => SensorActiveState.instance.SensorState[(int)sensorEnum]); //센서가 연결될때까지 대기
+            yield return new WaitUntil(() => SensorActiveState.Instance.SensorState[(int)sensorEnum]); //센서가 연결될때까지 대기
             yield return new WaitForFixedUpdate();
             SensorData = m_senserData.SensorData[((int)sensorEnum)];//호쿠요 센서 로우 데이터 받기
             vector3.Clear();
@@ -36,15 +36,17 @@ public class SensorManager : MonoBehaviour
             }
         }
     }
+
+    public Camera camera;
+
 #if UNITY_EDITOR
     Vector3 MousePosition;
-    public Camera camera;
 
     private void Update()
     {
         if(camera != null)
         {
-            SensorActiveState.instance.SensorState[((int)sensorEnum)] = true;
+            SensorActiveState.Instance.SensorState[((int)sensorEnum)] = true;
             if (Input.GetMouseButton(0))
             {
                 vector3.Clear();
@@ -57,6 +59,17 @@ public class SensorManager : MonoBehaviour
         }
     }
 #endif
+
+#if !UNITY_EDITOR
+
+    private void OnEnable()
+    {
+        if (camera != null)
+            Destroy(camera.gameObject);
+    }
+
+#endif
+
 
     //외부에서 vector3을 받기
     public List<Vector3> getSensorVector()

@@ -1,28 +1,11 @@
 using UnityEngine;
 
 //OSC 통신을 통해 HokuyoManage으로부터 데이터 받아오는 스크립트
-public class OSCManager : MonoBehaviour
+public class OSCManager : Singleton<OSCManager>
 {
-    public static OSCManager instance;
-
     public OSC _isOSC;
 
     public SensorDataFormat[] SensorData; //호쿠요로부터 받은 데이터를 저장
-
-    //싱글톤
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            if (instance != this) 
-                Destroy(this.gameObject);
-        }
-    }
 
     //초기화
     private void Start()
@@ -40,9 +23,9 @@ public class OSCManager : MonoBehaviour
         SensorData[((int)SensorEnum.Front)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
         SensorData[((int)SensorEnum.Front)].Position.Clear();
 
-        if (!SensorActiveState.instance.SensorState[((int)SensorEnum.Front)])
+        if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Front)])
         {
-            SensorActiveState.instance.SensorState[((int)SensorEnum.Front)] = true;
+            SensorActiveState.Instance.SensorState[((int)SensorEnum.Front)] = true;
             Debug.Log("정면 센서 연결");
         }
     }
@@ -60,7 +43,7 @@ public class OSCManager : MonoBehaviour
     //센서 종료 신호 받기
     public void FrontSensorQuit(OscMessage message)
     {
-        SensorActiveState.instance.SensorState[((int)SensorEnum.Front)] = false;
+        SensorActiveState.Instance.SensorState[((int)SensorEnum.Front)] = false;
         Debug.Log("정면 센서 종료");
     }
     #endregion
@@ -71,9 +54,9 @@ public class OSCManager : MonoBehaviour
         SensorData[((int)SensorEnum.Back)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
         SensorData[((int)SensorEnum.Back)].Position.Clear();
 
-        if (!SensorActiveState.instance.SensorState[((int)SensorEnum.Back)])
+        if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Back)])
         {
-            SensorActiveState.instance.SensorState[((int)SensorEnum.Back)] = true;
+            SensorActiveState.Instance.SensorState[((int)SensorEnum.Back)] = true;
             Debug.Log("후면 센서 연결");
         }
     }
@@ -91,7 +74,7 @@ public class OSCManager : MonoBehaviour
 
     public void BackSensorQuit(OscMessage message)
     {
-        SensorActiveState.instance.SensorState[((int)SensorEnum.Back)] = false;
+        SensorActiveState.Instance.SensorState[((int)SensorEnum.Back)] = false;
         Debug.Log("후면 센서 종료");
     }
     #endregion
@@ -102,9 +85,9 @@ public class OSCManager : MonoBehaviour
         SensorData[((int)SensorEnum.Right)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
         SensorData[((int)SensorEnum.Right)].Position.Clear();
 
-        if (!SensorActiveState.instance.SensorState[((int)SensorEnum.Right)])
+        if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Right)])
         {
-            SensorActiveState.instance.SensorState[((int)SensorEnum.Right)] = true;
+            SensorActiveState.Instance.SensorState[((int)SensorEnum.Right)] = true;
             Debug.Log("우면 센서 연결");
         }
     }
@@ -122,7 +105,7 @@ public class OSCManager : MonoBehaviour
 
     public void RightSensorQuit(OscMessage message)
     {
-        SensorActiveState.instance.SensorState[((int)SensorEnum.Right)] = false;
+        SensorActiveState.Instance.SensorState[((int)SensorEnum.Right)] = false;
         Debug.Log("우면 센서 종료");
     }
     #endregion
@@ -133,9 +116,9 @@ public class OSCManager : MonoBehaviour
         SensorData[((int)SensorEnum.Left)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
         SensorData[((int)SensorEnum.Left)].Position.Clear();
 
-        if (!SensorActiveState.instance.SensorState[((int)SensorEnum.Left)])
+        if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Left)])
         {
-            SensorActiveState.instance.SensorState[((int)SensorEnum.Left)] = true;
+            SensorActiveState.Instance.SensorState[((int)SensorEnum.Left)] = true;
             Debug.Log("좌면 센서 연결");
         }
     }
@@ -150,10 +133,10 @@ public class OSCManager : MonoBehaviour
     {
         //Debug.Log(message.GetInt(0));
     }
-
+        
     public void LeftSensorQuit(OscMessage message)
     {
-        SensorActiveState.instance.SensorState[((int)SensorEnum.Left)] = false;
+        SensorActiveState.Instance.SensorState[((int)SensorEnum.Left)] = false;
         Debug.Log("좌면 센서 종료");
     }
     #endregion
@@ -164,9 +147,9 @@ public class OSCManager : MonoBehaviour
         SensorData[((int)SensorEnum.Down)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
         SensorData[((int)SensorEnum.Down)].Position.Clear();
 
-        if (!SensorActiveState.instance.SensorState[((int)SensorEnum.Down)])
+        if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Down)])
         {
-            SensorActiveState.instance.SensorState[((int)SensorEnum.Down)] = true;
+            SensorActiveState.Instance.SensorState[((int)SensorEnum.Down)] = true;
             Debug.Log("바닥 센서 연결");
         }
     }
@@ -182,7 +165,7 @@ public class OSCManager : MonoBehaviour
 
     public void DownSensorQuit(OscMessage message)
     {
-        SensorActiveState.instance.SensorState[((int)SensorEnum.Down)] = false;
+        SensorActiveState.Instance.SensorState[((int)SensorEnum.Down)] = false;
         Debug.Log("바닥 센서 종료");
     }
     #endregion
