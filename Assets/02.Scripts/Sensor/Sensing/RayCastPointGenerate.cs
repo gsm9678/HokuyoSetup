@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using SensorTrigger.Base;
 
 public class RayCastPointGenerate : MonoBehaviour
 {
