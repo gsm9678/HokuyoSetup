@@ -1,162 +1,151 @@
 using UnityEngine;
 
-//OSC Åë½ÅÀ» ÅëÇØ HokuyoManageÀ¸·ÎºÎÅÍ µ¥ÀÌÅÍ ¹Ş¾Æ¿À´Â ½ºÅ©¸³Æ®
+//OSC í†µì‹ ì„ í†µí•´ HokuyoManagerë¡œë¶€í„° ë°ì´í„° ë°›ì•„ì˜¤ëŠ” ìŠ¤í¬ë¦½íŠ¸
 public class OSCManager : Singleton<OSCManager>
 {
     public OSC _isOSC;
 
-    public SensorDataFormat[] SensorData; //È£Äí¿ä·ÎºÎÅÍ ¹ŞÀº µ¥ÀÌÅÍ¸¦ ÀúÀå
+    public SensorDataFormat[] SensorData; //í˜¸ì¿ ìš”ë¡œë¶€í„° ë°›ì€ ë°ì´í„°ë¥¼ ì €ì¥
 
-    //ÃÊ±âÈ­
+    //ì´ˆê¸°í™”
     private void Start()
     {
         SetOSC_EventHandler();
-        SensorData =  new SensorDataFormat[System.Enum.GetValues(typeof(SensorEnum)).Length];
+        SensorData = new SensorDataFormat[System.Enum.GetValues(typeof(SensorEnum)).Length];
         for (int i = 0; i < SensorData.Length; i++)
             SensorData[i] = new SensorDataFormat();
     }
 
     #region FrontSensor
-    //¼¾¼­ ¿¬°á»óÅÂ ÃÖ½ÅÈ­, È£Äí¿ä ¸Ş´ÏÀú¿¡¼­ ¼³Á¤ÇÑ ¹æ Å©±â °ª ¹Ş±â
+    //ì„¼ì„œ ì—°ê²°ìƒíƒœ ìµœì‹ í™”, í˜¸ì¿ ìš” ë§¤ë‹ˆì €ì—ì„œ ì„¤ì •í•œ ë°© í¬ê¸° ê°’ ë°›ê¸°
     public void getFrontStartMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Front)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
-        SensorData[((int)SensorEnum.Front)].Position.Clear();
+        StartSensor(SensorEnum.Front, message);
 
         if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Front)])
         {
             SensorActiveState.Instance.SensorState[((int)SensorEnum.Front)] = true;
-            Debug.Log("Á¤¸é ¼¾¼­ ¿¬°á");
+            Debug.Log("ì •ë©´ ì„¼ì„œ ì—°ê²°");
         }
     }
 
-    //ÀÎ½ÄÇÑ ¹°Ã¼ÀÇ À§Ä¡°ª ¹Ş±â
+    //ì¸ì‹í•œ ë¬¼ì²´ì˜ ìœ„ì¹˜ê°’ ë°›ê¸°
     public void getFrontSensorMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Front)].Position.Add(new Vector3(message.GetFloat(0), message.GetFloat(1), 0));
+        AddSensorData(SensorEnum.Front, message);
     }
 
     public void getFrontStopMessage(OscMessage message)
     {
     }
 
-    //¼¾¼­ Á¾·á ½ÅÈ£ ¹Ş±â
+    //ì„¼ì„œ ì¢…ë£Œ ì‹ í˜¸ ë°›ê¸°
     public void FrontSensorQuit(OscMessage message)
     {
         SensorActiveState.Instance.SensorState[((int)SensorEnum.Front)] = false;
-        Debug.Log("Á¤¸é ¼¾¼­ Á¾·á");
+        Debug.Log("ì •ë©´ ì„¼ì„œ ì¢…ë£Œ");
     }
     #endregion
 
     #region BackSensor
     public void getBackStartMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Back)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
-        SensorData[((int)SensorEnum.Back)].Position.Clear();
+        StartSensor(SensorEnum.Back, message);
 
         if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Back)])
         {
             SensorActiveState.Instance.SensorState[((int)SensorEnum.Back)] = true;
-            Debug.Log("ÈÄ¸é ¼¾¼­ ¿¬°á");
+            Debug.Log("í›„ë©´ ì„¼ì„œ ì—°ê²°");
         }
     }
 
     public void getBackSensorMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Back)].Position.Add(new Vector3(message.GetFloat(0), message.GetFloat(1), 0));
-        //Debug.Log(SensorData.Position.Count);
+        AddSensorData(SensorEnum.Back, message);
     }
 
     public void getBackStopMessage(OscMessage message)
     {
-        //Debug.Log(message.GetInt(0));
     }
 
     public void BackSensorQuit(OscMessage message)
     {
         SensorActiveState.Instance.SensorState[((int)SensorEnum.Back)] = false;
-        Debug.Log("ÈÄ¸é ¼¾¼­ Á¾·á");
+        Debug.Log("í›„ë©´ ì„¼ì„œ ì¢…ë£Œ");
     }
     #endregion
 
     #region RightSensor
     public void getRightStartMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Right)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
-        SensorData[((int)SensorEnum.Right)].Position.Clear();
+        StartSensor(SensorEnum.Right, message);
 
         if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Right)])
         {
             SensorActiveState.Instance.SensorState[((int)SensorEnum.Right)] = true;
-            Debug.Log("¿ì¸é ¼¾¼­ ¿¬°á");
+            Debug.Log("ìš°ë©´ ì„¼ì„œ ì—°ê²°");
         }
     }
 
     public void getRightSensorMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Right)].Position.Add(new Vector3(message.GetFloat(0), message.GetFloat(1), 0));
-        //Debug.Log(SensorData.Position.Count);
+        AddSensorData(SensorEnum.Right, message);
     }
 
     public void getRightStopMessage(OscMessage message)
     {
-        //Debug.Log(message.GetInt(0));
     }
 
     public void RightSensorQuit(OscMessage message)
     {
         SensorActiveState.Instance.SensorState[((int)SensorEnum.Right)] = false;
-        Debug.Log("¿ì¸é ¼¾¼­ Á¾·á");
+        Debug.Log("ìš°ë©´ ì„¼ì„œ ì¢…ë£Œ");
     }
     #endregion
 
     #region LeftSensor
     public void getLeftStartMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Left)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
-        SensorData[((int)SensorEnum.Left)].Position.Clear();
+        StartSensor(SensorEnum.Left, message);
 
         if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Left)])
         {
             SensorActiveState.Instance.SensorState[((int)SensorEnum.Left)] = true;
-            Debug.Log("ÁÂ¸é ¼¾¼­ ¿¬°á");
+            Debug.Log("ì¢Œë©´ ì„¼ì„œ ì—°ê²°");
         }
     }
 
     public void getLeftSensorMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Left)].Position.Add(new Vector3(message.GetFloat(0), message.GetFloat(1), 0));
-        //Debug.Log(SensorData.Position.Count);
+        AddSensorData(SensorEnum.Left, message);
     }
 
     public void getLeftStopMessage(OscMessage message)
     {
-        //Debug.Log(message.GetInt(0));
     }
-        
+
     public void LeftSensorQuit(OscMessage message)
     {
         SensorActiveState.Instance.SensorState[((int)SensorEnum.Left)] = false;
-        Debug.Log("ÁÂ¸é ¼¾¼­ Á¾·á");
+        Debug.Log("ì¢Œë©´ ì„¼ì„œ ì¢…ë£Œ");
     }
     #endregion
 
     #region DownSensor
     public void getDownStartMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Down)].RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
-        SensorData[((int)SensorEnum.Down)].Position.Clear();
+        StartSensor(SensorEnum.Down, message);
 
         if (!SensorActiveState.Instance.SensorState[((int)SensorEnum.Down)])
         {
             SensorActiveState.Instance.SensorState[((int)SensorEnum.Down)] = true;
-            Debug.Log("¹Ù´Ú ¼¾¼­ ¿¬°á");
+            Debug.Log("ë°”ë‹¥ ì„¼ì„œ ì—°ê²°");
         }
     }
 
     public void getDownSensorMessage(OscMessage message)
     {
-        SensorData[((int)SensorEnum.Down)].Position.Add(new Vector3(message.GetFloat(0), message.GetFloat(1), 0));
+        AddSensorData(SensorEnum.Down, message);
     }
 
     public void getDownStopMessage(OscMessage message)
@@ -166,11 +155,62 @@ public class OSCManager : Singleton<OSCManager>
     public void DownSensorQuit(OscMessage message)
     {
         SensorActiveState.Instance.SensorState[((int)SensorEnum.Down)] = false;
-        Debug.Log("¹Ù´Ú ¼¾¼­ Á¾·á");
+        Debug.Log("ë°”ë‹¥ ì„¼ì„œ ì¢…ë£Œ");
     }
     #endregion
 
-    void SetOSC_EventHandler()
+    #region TrackedSensor
+    private void StartSensor(SensorEnum sensorEnum, OscMessage message)
+    {
+        SensorDataFormat sensorData = SensorData[(int)sensorEnum];
+        sensorData.RectSize = new Vector2(message.GetFloat(0), message.GetFloat(1));
+        sensorData.Position.Clear();
+        sensorData.TrackedObjects.Clear();
+    }
+
+    private void AddSensorData(SensorEnum sensorEnum, OscMessage message)
+    {
+        SensorDataFormat sensorData = SensorData[(int)sensorEnum];
+
+        if (IsTrackedDataMessage(message))
+        {
+            TrackedSensorDataFormat trackedObject = new TrackedSensorDataFormat
+            {
+                Id = message.GetInt(0),
+                Position = new Vector3(message.GetFloat(1), message.GetFloat(2), 0),
+                State = ParseTrackState(message.GetString(3))
+            };
+
+            sensorData.TrackedObjects.Add(trackedObject);
+            sensorData.Position.Add(trackedObject.Position);
+            return;
+        }
+
+        sensorData.Position.Add(new Vector3(message.GetFloat(0), message.GetFloat(1), 0));
+    }
+
+    private bool IsTrackedDataMessage(OscMessage message)
+    {
+        return message.values.Count >= 4 && message.values[3] is string;
+    }
+
+    private TrackState ParseTrackState(string value)
+    {
+        switch (value.ToLowerInvariant())
+        {
+            case "occluded":
+                return TrackState.Occluded;
+            case "merged":
+                return TrackState.Merged;
+            case "lost":
+                return TrackState.Lost;
+            default:
+                return TrackState.Active;
+        }
+    }
+    #endregion
+
+    private void SetOSC_EventHandler()
     {
         _isOSC.SetAddressHandler("/Front/Start", getFrontStartMessage);
         _isOSC.SetAddressHandler("/Front/Data", getFrontSensorMessage);

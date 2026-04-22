@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +9,10 @@ public class SensorManager : MonoBehaviour
     private OSCManager m_senserData;
     private SensorDataFormat SensorData;
     List<Vector3> vector3 = new List<Vector3>();
+    List<TrackedSensorDataFormat> trackedObjects = new List<TrackedSensorDataFormat>();
 
     [SerializeField]
-    RectTransform SensorPosi;//¸ÊÇÎÇÒ ´ë»ó
+    RectTransform SensorPosi;//ë§µí•‘í•  ëŒ€ìƒ
 
     void Start()
     {
@@ -23,21 +24,31 @@ public class SensorManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitUntil(() => SensorActiveState.Instance.SensorState[(int)sensorEnum]); //¼¾¼­°¡ ¿¬°áµÉ¶§±îÁö ´ë±â
+            yield return new WaitUntil(() => SensorActiveState.Instance.SensorState[(int)sensorEnum]); //ì„¼ì„œê°€ ì—°ê²°ë ë•Œê¹Œì§€ ëŒ€ê¸°
             yield return new WaitForFixedUpdate();
-            SensorData = m_senserData.SensorData[((int)sensorEnum)];//È£Äí¿ä ¼¾¼­ ·Î¿ì µ¥ÀÌÅÍ ¹Ş±â
+            SensorData = m_senserData.SensorData[((int)sensorEnum)];//í˜¸ì¿ ìš” ì„¼ì„œ ë¡œìš° ë°ì´í„° ë°›ê¸°
             vector3.Clear();
+            trackedObjects.Clear();
 
-            for (int i = 0; i < SensorData.Position.Count; i++)//È£Äí¿ä ¼¾¼­ ·Î¿ì µ¥ÀÌÅÍ¸¦ ÄÁÅÙÃ÷¿¡¼­ »ç¿ëÇÒ ¼ö ÀÖ°Ô ¸ÊÇÎ
+            for (int i = 0; i < SensorData.Position.Count; i++)//í˜¸ì¿ ìš” ì„¼ì„œ ë¡œìš° ë°ì´í„°ë¥¼ ì»¨í…ì¸ ì—ì„œ ì‚¬ìš©í•  ìˆ˜ ìˆê²Œ ë§µí•‘
             {
-                vector3.Add(new Vector3(scale(-SensorData.RectSize.x / 2, SensorData.RectSize.x / 2, SensorPosi.position.x - SensorPosi.rect.width / 2, SensorPosi.position.x + SensorPosi.rect.width / 2, SensorData.Position[i].x),
-                                        scale(-SensorData.RectSize.y / 2, SensorData.RectSize.y / 2, SensorPosi.position.y - SensorPosi.rect.height / 2, SensorPosi.position.y + SensorPosi.rect.height / 2, SensorData.Position[i].y),
-                                        0));
+                vector3.Add(MapSensorPosition(SensorData.Position[i]));
+            }
+
+            for (int i = 0; i < SensorData.TrackedObjects.Count; i++)
+            {
+                TrackedSensorDataFormat rawObject = SensorData.TrackedObjects[i];
+                trackedObjects.Add(new TrackedSensorDataFormat
+                {
+                    Id = rawObject.Id,
+                    Position = MapSensorPosition(rawObject.Position),
+                    State = rawObject.State
+                });
             }
         }
     }
 
-    public Camera camera;
+    public new Camera camera;
 
 #if UNITY_EDITOR
     Vector3 MousePosition;
@@ -50,6 +61,7 @@ public class SensorManager : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 vector3.Clear();
+                trackedObjects.Clear();
                 MousePosition = Input.mousePosition;
 
                 vector3.Add(new Vector3(scale(-camera.pixelWidth / 2, camera.pixelWidth / 2, SensorPosi.position.x - SensorPosi.rect.width / 2, SensorPosi.position.x + SensorPosi.rect.width / 2, MousePosition.x - camera.pixelWidth / 2),
@@ -71,13 +83,25 @@ public class SensorManager : MonoBehaviour
 #endif
 
 
-    //¿ÜºÎ¿¡¼­ vector3À» ¹Ş±â
+    //ì™¸ë¶€ì—ì„œ vector3ì„ ë°›ê¸°
     public List<Vector3> getSensorVector()
     {
         return vector3;
     }
 
-    //È£Äí¿ä ¸Ş´ÏÀú¿¡¼­ ¹ŞÀº À§Ä¡ µ¥ÀÌÅÍ¸¦ ÄÁÅÙÃ÷ À§Ä¡¿¡ ¸ÊÇÎ
+    public List<TrackedSensorDataFormat> getTrackedSensorObjects()
+    {
+        return trackedObjects;
+    }
+
+    private Vector3 MapSensorPosition(Vector3 sensorPosition)
+    {
+        return new Vector3(scale(-SensorData.RectSize.x / 2, SensorData.RectSize.x / 2, SensorPosi.position.x - SensorPosi.rect.width / 2, SensorPosi.position.x + SensorPosi.rect.width / 2, sensorPosition.x),
+                           scale(-SensorData.RectSize.y / 2, SensorData.RectSize.y / 2, SensorPosi.position.y - SensorPosi.rect.height / 2, SensorPosi.position.y + SensorPosi.rect.height / 2, sensorPosition.y),
+                           0);
+    }
+
+    //í˜¸ì¿ ìš” ë§¤ë‹ˆì €ì—ì„œ ë°›ì€ ìœ„ì¹˜ ë°ì´í„°ë¥¼ ì»¨í…ì¸  ìœ„ì¹˜ì— ë§µí•‘
     private float scale(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
     {
         float OldRange = (OldMax - OldMin);
