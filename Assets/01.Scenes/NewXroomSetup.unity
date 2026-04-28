@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -206,6 +205,7 @@ MonoBehaviour:
   sensorEnum: 1
   sensorManager: {fileID: 1680520973}
   TouchPoint: {fileID: 645335426845738444, guid: f5cd71ec6f3558f4b8927c8541b75d4f, type: 3}
+  TrackedPoint: {fileID: -6322967718260320820, guid: 5cac91c2ac45bb843a4140d62bc3c418, type: 3}
   TouchPointBasket: {fileID: 1703922784546469681}
 --- !u!1 &328117496
 GameObject:
@@ -254,6 +254,7 @@ MonoBehaviour:
   sensorEnum: 2
   sensorManager: {fileID: 1724296939}
   TouchPoint: {fileID: 645335426845738444, guid: f5cd71ec6f3558f4b8927c8541b75d4f, type: 3}
+  TrackedPoint: {fileID: -6322967718260320820, guid: 5cac91c2ac45bb843a4140d62bc3c418, type: 3}
   TouchPointBasket: {fileID: 7631790944695933601}
 --- !u!1 &505612504
 GameObject:
@@ -285,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isOSC: {fileID: 1256334237}
+  SensorData: []
 --- !u!4 &505612506
 Transform:
   m_ObjectHideFlags: 0
@@ -611,6 +613,7 @@ MonoBehaviour:
   sensorEnum: 3
   sensorManager: {fileID: 1731481614}
   TouchPoint: {fileID: 645335426845738444, guid: f5cd71ec6f3558f4b8927c8541b75d4f, type: 3}
+  TrackedPoint: {fileID: -6322967718260320820, guid: 5cac91c2ac45bb843a4140d62bc3c418, type: 3}
   TouchPointBasket: {fileID: 9175560347114747307}
 --- !u!1 &1217305847
 GameObject:
@@ -706,6 +709,7 @@ MonoBehaviour:
   sensorEnum: 4
   sensorManager: {fileID: 1217305848}
   TouchPoint: {fileID: 645335426845738444, guid: f5cd71ec6f3558f4b8927c8541b75d4f, type: 3}
+  TrackedPoint: {fileID: -6322967718260320820, guid: 5cac91c2ac45bb843a4140d62bc3c418, type: 3}
   TouchPointBasket: {fileID: 3616296583646278681}
 --- !u!1 &1256334236
 GameObject:
@@ -1105,6 +1109,7 @@ MonoBehaviour:
   sensorEnum: 0
   sensorManager: {fileID: 969424273}
   TouchPoint: {fileID: 645335426845738444, guid: f5cd71ec6f3558f4b8927c8541b75d4f, type: 3}
+  TrackedPoint: {fileID: -6322967718260320820, guid: 5cac91c2ac45bb843a4140d62bc3c418, type: 3}
   TouchPointBasket: {fileID: 3336085151435847750}
 --- !u!1 &1845572301
 GameObject:
