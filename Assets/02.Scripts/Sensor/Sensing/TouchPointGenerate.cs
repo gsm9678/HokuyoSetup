@@ -1,77 +1,87 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchPointGenerate : MonoBehaviour
 {
+    private enum PointPositionSpace
+    {
+        Auto,
+        Local,
+        World
+    }
+
     public SensorEnum sensorEnum;
     private List<GameObject> TouchPoints = new List<GameObject>();
     private List<TrackedPoint> TrackedPoints = new List<TrackedPoint>();
 
     [SerializeField] private SensorManager sensorManager;
-    [SerializeField] private GameObject TouchPoint;//»ı¼ºÇÒ ÇÁ¸®ÆÕ
-    [SerializeField] private TrackedPoint TrackedPoint;//»ı¼ºÇÒ ÇÁ¸®ÆÕ
+    [SerializeField] private GameObject TouchPoint;//ìƒì„±í•  í”„ë¦¬íŒ¹
+    [SerializeField] private TrackedPoint TrackedPoint;//ìƒì„±í•  í”„ë¦¬íŒ¹
 
-    [SerializeField] private Transform TouchPointBasket;//»ı¼ºÇÑ ÇÁ¸®ÆÕ Æ®·»½ºÆû
+    [SerializeField] private Transform TouchPointBasket;//ìƒì„±í•œ í”„ë¦¬íŒ¹ íŠ¸ë ŒìŠ¤í¼
+    [SerializeField] private PointPositionSpace pointPositionSpace = PointPositionSpace.Auto;
 
     // Update is called once per frame
     void Update()
     {
-        if (SensorActiveState.Instance.SensorState[((int)sensorEnum)])//È£Äí¿ä ¸Ş´ÏÀú°¡ ¿¬°áµÇ¾úÀ¸¸é
+        if (SensorActiveState.Instance.SensorState[((int)sensorEnum)])//í˜¸ì¿ ìš” ë©”ë‹ˆì €ê°€ ì—°ê²°ë˜ì—ˆìœ¼ë©´
         {
             if (TouchPoint != null)
             {
-                if (sensorManager.getTrackedSensorObjects().Count != 0)
+                bool useWorldPosition = ShouldUseWorldPosition();
+                List<TrackedSensorDataFormat> trackedSensorObjects = useWorldPosition ? sensorManager.getTrackedSensorWorldObjects() : sensorManager.getTrackedSensorObjects();
+                List<Vector3> sensorVector = useWorldPosition ? sensorManager.getSensorWorldVector() : sensorManager.getSensorVector();
+
+                if (trackedSensorObjects.Count != 0)
                 {
-                    if (sensorManager.getTrackedSensorObjects().Count > TrackedPoints.Count)//¿ÀºêÁ§Æ® Ç®¸µ
+                    if (trackedSensorObjects.Count > TrackedPoints.Count)//ì˜¤ë¸Œì íŠ¸ í’€ë§
                     {
-                        for (int i = TouchPoints.Count; i < sensorManager.getTrackedSensorObjects().Count; i++)
+                        for (int i = TrackedPoints.Count; i < trackedSensorObjects.Count; i++)
                         {
                             TrackedPoints.Add(Instantiate(TrackedPoint, TouchPointBasket));
                         }
                     }
-                    else if (sensorManager.getTrackedSensorObjects().Count < TrackedPoints.Count)//¿ÀºêÁ§Æ® Ç®¸µ
+                    else if (trackedSensorObjects.Count < TrackedPoints.Count)//ì˜¤ë¸Œì íŠ¸ í’€ë§
                     {
-                        for (int i = sensorManager.getTrackedSensorObjects().Count; i < TrackedPoints.Count; i++)
+                        for (int i = trackedSensorObjects.Count; i < TrackedPoints.Count; i++)
                         {
                             TrackedPoints[i].gameObject.SetActive(false);
                         }
                     }
 
-                    for (int i = 0; i < sensorManager.getTrackedSensorObjects().Count; i++)//¿ÀºêÁ§Æ® Ç®¸µ, ¼¾¼­ À§Ä¡¿¡ ÀÌµ¿
+                    for (int i = 0; i < trackedSensorObjects.Count; i++)//ì˜¤ë¸Œì íŠ¸ í’€ë§, ì„¼ì„œ ìœ„ì¹˜ì— ì´ë™
                     {
                         TrackedPoints[i].gameObject.SetActive(true);
-                        TrackedPoints[i].id = sensorManager.getTrackedSensorObjects()[i].Id;
-                        TrackedPoints[i].State = sensorManager.getTrackedSensorObjects()[i].State;
-                        TrackedPoints[i].transform.localPosition = sensorManager.getTrackedSensorObjects()[i].Position;
+                        TrackedPoints[i].SetTrackedPoint(trackedSensorObjects[i]);
+                        SetPointPosition(TrackedPoints[i].transform, trackedSensorObjects[i].Position, useWorldPosition);
                     }
-
                 }
                 else
                 {
-                    if (sensorManager.getSensorVector().Count > TouchPoints.Count)//¿ÀºêÁ§Æ® Ç®¸µ
+                    if (sensorVector.Count > TouchPoints.Count)//ì˜¤ë¸Œì íŠ¸ í’€ë§
                     {
-                        for (int i = TouchPoints.Count; i < sensorManager.getSensorVector().Count; i++)
+                        for (int i = TouchPoints.Count; i < sensorVector.Count; i++)
                         {
                             TouchPoints.Add(Instantiate(TouchPoint, TouchPointBasket));
                         }
                     }
-                    else if (sensorManager.getSensorVector().Count < TouchPoints.Count)//¿ÀºêÁ§Æ® Ç®¸µ
+                    else if (sensorVector.Count < TouchPoints.Count)//ì˜¤ë¸Œì íŠ¸ í’€ë§
                     {
-                        for (int i = sensorManager.getSensorVector().Count; i < TouchPoints.Count; i++)
+                        for (int i = sensorVector.Count; i < TouchPoints.Count; i++)
                         {
                             TouchPoints[i].SetActive(false);
                         }
                     }
 
-                    for (int i = 0; i < sensorManager.getSensorVector().Count; i++)//¿ÀºêÁ§Æ® Ç®¸µ, ¼¾¼­ À§Ä¡¿¡ ÀÌµ¿
+                    for (int i = 0; i < sensorVector.Count; i++)//ì˜¤ë¸Œì íŠ¸ í’€ë§, ì„¼ì„œ ìœ„ì¹˜ì— ì´ë™
                     {
                         TouchPoints[i].SetActive(true);
-                        TouchPoints[i].transform.localPosition = sensorManager.getSensorVector()[i];
+                        SetPointPosition(TouchPoints[i].transform, sensorVector[i], useWorldPosition);
                     }
                 }
             }
         }
-        else//È£Äí¿ä ¸Ş´ÏÀú°¡ ¿¬°áÀÌ ¾ÈµÇ¾îÀÖÀ¸¸é ¸ğµç ¿ÀºêÁ§Æ® False
+        else//í˜¸ì¿ ìš” ë©”ë‹ˆì €ê°€ ì—°ê²°ì´ ì•ˆë˜ì–´ìˆìœ¼ë©´ ëª¨ë“  ì˜¤ë¸Œì íŠ¸ False
         {
             for(int i = 0; i < TouchPoints.Count; i++)
             {
@@ -82,5 +92,27 @@ public class TouchPointGenerate : MonoBehaviour
                 TrackedPoints[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    private bool ShouldUseWorldPosition()
+    {
+        if (pointPositionSpace == PointPositionSpace.World)
+            return true;
+
+        if (pointPositionSpace == PointPositionSpace.Local)
+            return false;
+
+        bool touchPointUsesRectTransform = TouchPoint != null && TouchPoint.GetComponent<RectTransform>() != null;
+        bool basketUsesRectTransform = TouchPointBasket != null && TouchPointBasket.GetComponent<RectTransform>() != null;
+
+        return !(touchPointUsesRectTransform && basketUsesRectTransform);
+    }
+
+    private void SetPointPosition(Transform target, Vector3 position, bool useWorldPosition)
+    {
+        if (useWorldPosition)
+            target.position = position;
+        else
+            target.localPosition = position;
     }
 }
